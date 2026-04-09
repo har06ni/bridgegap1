@@ -9,7 +9,7 @@ export default function MatchResultPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/match/${id}`, {
+    fetch(`/api/match/${id}`, {
       method: 'POST'
     })
       .then(res => {

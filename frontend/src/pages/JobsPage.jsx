@@ -7,7 +7,7 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/jobs')
+    fetch('/api/jobs')
       .then(res => res.json())
       .then(data => {
         setJobs(data);

@@ -8,7 +8,7 @@ export default function DashboardPage() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/student')
+    fetch('/api/student')
       .then(res => res.json())
       .then(data => {
         if (data.name) {
@@ -26,7 +26,7 @@ export default function DashboardPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/student', {
+      const res = await fetch('/api/student', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
