@@ -8,10 +8,23 @@ export default function DashboardPage() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    // Check localStorage first for persistence on Vercel
+    const localData = localStorage.getItem('studentProfile');
+    if (localData) {
+      const parsed = JSON.parse(localData);
+      setSavedProfile(parsed);
+      setProfile({
+        name: parsed.name || '',
+        skills: parsed.skills.join(', ') || '',
+        interests: parsed.interests || ''
+      });
+    }
+
+    // Still fetch from API to ensure backend is in sync (optional but good for dev)
     fetch('/api/student')
       .then(res => res.json())
       .then(data => {
-        if (data.name) {
+        if (data.name && !localData) { // Only override if local storage is empty
           setSavedProfile(data);
           setProfile({
             name: data.name || '',
@@ -25,17 +38,22 @@ export default function DashboardPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const profileData = {
+      name: profile.name,
+      skills: profile.skills.split(',').map(s => s.trim()).filter(s => s.length > 0),
+      interests: profile.interests
+    };
+
     try {
+      // Save to localStorage immediately
+      localStorage.setItem('studentProfile', JSON.stringify(profileData));
+      
       const res = await fetch('/api/student', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          name: profile.name,
-          skills: profile.skills, // Backend handles string split
-          interests: profile.interests
-        })
+        body: JSON.stringify(profileData)
       });
       const data = await res.json();
       setSavedProfile(data.profile);
@@ -43,6 +61,8 @@ export default function DashboardPage() {
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       console.error(err);
+      // Fallback: update UI from local data even if API fails
+      setSavedProfile(profileData);
     } finally {
       setLoading(false);
     }

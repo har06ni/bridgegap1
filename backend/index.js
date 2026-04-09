@@ -44,6 +44,66 @@ const jobs = [
     title: 'DevOps Engineer',
     company: 'Cloud Systems',
     requiredSkills: ['Docker', 'Kubernetes', 'AWS', 'Linux']
+  },
+  {
+    id: 6,
+    title: 'UI/UX Designer',
+    company: 'Creative Studio',
+    requiredSkills: ['Figma', 'Adobe XD', 'User Research']
+  },
+  {
+    id: 7,
+    title: 'Mobile App Developer',
+    company: 'AppVentures',
+    requiredSkills: ['React Native', 'JavaScript', 'Firebase']
+  },
+  {
+    id: 8,
+    title: 'Cybersecurity Analyst',
+    company: 'SecureNet',
+    requiredSkills: ['Networking', 'Linux', 'Security Auditing']
+  },
+  {
+    id: 9,
+    title: 'Machine Learning Engineer',
+    company: 'AILabs',
+    requiredSkills: ['Python', 'PyTorch', 'Mathematics']
+  },
+  {
+    id: 10,
+    title: 'Cloud Architect',
+    company: 'Global Cloud',
+    requiredSkills: ['AWS', 'Azure', 'Terraform']
+  },
+  {
+    id: 11,
+    title: 'Database Administrator',
+    company: 'DataStore',
+    requiredSkills: ['SQL', 'PostgreSQL', 'Performance Tuning']
+  },
+  {
+    id: 12,
+    title: 'QA Automation Engineer',
+    company: 'TestLogic',
+    requiredSkills: ['Selenium', 'Cypress', 'JavaScript']
+  },
+  {
+    id: 13,
+    title: 'Embedded Systems Engineer',
+    company: 'ChipTech',
+    requiredSkills: ['C', 'C++', 'Microcontrollers']
+  },
+  {
+    id: 14,
+    title: 'Digital Marketing Specialist',
+    company: 'GrowFast',
+    requiredSkills: ['SEO', 'Google Analytics', 'Content Strategy']
+  },
+  {
+    id: 15,
+    title: 'Blockchain Developer',
+    company: 'CryptoInnovate',
+    requiredSkills: ['Solidity', 'Ethereum', 'Smart Contracts']
   }
 ];
 
@@ -81,8 +141,8 @@ app.post('/api/match/:jobId', (req, res) => {
     return res.status(404).json({ error: 'Job not found' });
   }
 
-  const jobSkills = job.requiredSkills.map(s => s.toLowerCase());
-  const studentSkills = studentProfile.skills.map(s => s.toLowerCase());
+  const { skills } = req.body;
+  const studentSkills = Array.isArray(skills) ? skills.map(s => s.toLowerCase()) : [];
 
   const matchedSkills = job.requiredSkills.filter(s => studentSkills.includes(s.toLowerCase()));
   const missingSkills = job.requiredSkills.filter(s => !studentSkills.includes(s.toLowerCase()));

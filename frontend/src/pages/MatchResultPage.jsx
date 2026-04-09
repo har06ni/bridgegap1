@@ -9,8 +9,15 @@ export default function MatchResultPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    const localData = localStorage.getItem('studentProfile');
+    const skills = localData ? JSON.parse(localData).skills : [];
+
     fetch(`/api/match/${id}`, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ skills })
     })
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch match');
